@@ -1469,6 +1469,14 @@ in {
           A new module is available: 'services.activitywatch'.
         '';
       }
+
+      {
+        time = "2024-03-27T23:42:32+00:00";
+        condition = hostPlatform.isDarwin;
+        message = ''
+          A new module is available: 'darwin.windowManager.aerospace'.
+        '';
+      }
     ];
   };
 }

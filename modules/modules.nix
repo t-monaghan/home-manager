@@ -360,6 +360,7 @@ let
     ./services/unison.nix
     ./services/vdirsyncer.nix
     ./services/volnoti.nix
+    ./services/window-managers/aerospace.nix
     ./services/window-managers/awesome.nix
     ./services/window-managers/bspwm/default.nix
     ./services/window-managers/fluxbox.nix
