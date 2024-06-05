@@ -46,9 +46,12 @@ let
           (value.khal.type == "birthdays" && value.khal ? thisCollection)
           value.khal.thisCollection)
       }"
-    ] ++ optional (value.khal.readOnly) "readonly = True" ++ [
-      (toKeyValueIfDefined (getAttrs [ "type" "color" "priority" ] value.khal))
-    ] ++ [ "\n" ]);
+    ] ++ optional (value.khal.readOnly) "readonly = True"
+      ++ optional (value.khal.addresses != [ ])
+      "addresses= ${lib.concatStringsSep ", " value.khal.addresses}"
+      ++ optional (value.khal.color != null) "color = '${value.khal.color}'"
+      ++ [ (toKeyValueIfDefined (getAttrs [ "type" "priority" ] value.khal)) ]
+      ++ [ "\n" ]);
 
   localeFormatOptions = let
     T = lib.types;
@@ -165,6 +168,8 @@ in {
   options.programs.khal = {
     enable = mkEnableOption "khal, a CLI calendar application";
 
+    package = mkPackageOption pkgs "khal" { };
+
     locale = mkOption {
       type = lib.types.submodule { options = localeOptions; };
       description = ''
@@ -194,7 +199,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    home.packages = [ pkgs.khal ];
+    home.packages = [ cfg.package ];
 
     xdg.configFile."khal/config".text = concatStringsSep "\n" ([ "[calendars]" ]
       ++ mapAttrsToList genCalendarStr khalAccounts ++ [
